@@ -60,7 +60,7 @@ const RegistrationForm = () => {
             className="form-control"
           />
           <p className="text-danger">{errors.regUsername}</p>
-        </div>
+     </div>
         <div className="mb-3">
           <input
             type="email"

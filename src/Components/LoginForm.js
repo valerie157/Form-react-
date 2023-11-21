@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
+
 const LoginForm = () => {
   const [loginData, setLoginData] = useState({
     loginEmail: '',
@@ -29,13 +31,25 @@ const LoginForm = () => {
     }
   };
 
-  const handleLoginSubmit = (e) => {
+  const handleLoginSubmit = async (e) => {
     e.preventDefault();
     const isFormValid = Object.values(errors).every((error) => !error);
 
     if (isFormValid) {
-      toast.success('Login successful!');
-     
+      try {
+        // Make a POST request to the backend endpoint for login authentication
+        const response = await axios.post('http://localhost:4000/login', loginData);
+        // Check the response from the server for success or failure
+        if (response.data.success) {
+          toast.success('Login successful!');
+          window.location.href = "/dashboard"; // Redirect to the dashboard upon successful login
+        } else {
+          toast.error('Invalid email or password.');
+        }
+      } catch (error) {
+        console.error('Error logging in:', error);
+        toast.error('An error occurred during login.');
+      }
     } else {
       toast.error('Please correct the errors in the form.');
     }
@@ -75,4 +89,3 @@ const LoginForm = () => {
 };
 
 export default LoginForm;
-
